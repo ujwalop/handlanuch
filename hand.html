@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Video and Progress Bar</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Arial', sans-serif;
+      background-color: #1e1e2f;
+      color: #fff;
+      overflow: hidden;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      flex-direction: column;
+    }
+
+    .video-container {
+      position: relative;
+      width: 100%;
+      height: 100vh;
+      overflow: hidden;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    video#video1, video#video2 {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      position: absolute;
+      top: 0;
+      left: 0;
+    }
+
+    .gif-container {
+      display: none;
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+    }
+
+    .gif-container img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .progress-container {
+      position: absolute;
+      bottom: 80px;
+      width: 80%;
+      height: 30px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+    }
+
+    .progress-bar {
+      width: 0;
+      height: 100%;
+      background: linear-gradient(270deg, #00f, #00a, #00f);
+      background-size: 200% 100%;
+      animation: waterFlow 3s infinite;
+      border-radius: 20px;
+      transition: width 0.5s ease-in-out, background 0.5s ease-in-out;
+      position: relative;
+    }
+
+    .progress-text {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      text-align: center;
+      line-height: 30px;
+      color: #fff;
+      font-weight: bold;
+      font-size: 16px;
+    }
+
+    @keyframes waterFlow {
+      0% { background-position: 0% 0; }
+      100% { background-position: 100% 0; }
+    }
+
+    .watermark {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(10px);
+      border-radius: 12px;
+      padding: 8px 15px;
+      font-size: 14px;
+      color: #fff;
+      font-weight: bold;
+      box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+      cursor: pointer;
+    }
+
+    .fade-out {
+      animation: fadeOut 1s ease-in-out forwards;
+    }
+
+    @keyframes fadeOut {
+      0% { opacity: 1; }
+      100% { opacity: 0; display: none; }
+    }
+
+  </style>
+</head>
+<body>
+
+  <div class="video-container">
+    <video id="video1" autoplay muted>
+      <source src="video1.mp4" type="video/mp4">
+      Your browser does not support the video tag.
+    </video>
+    <div class="gif-container" id="gif-container">
+      <img id="gif" src="handop1.gif" alt="Background GIF">
+    </div>
+    <video id="video2" muted loop style="display: none;">
+      <source src="video2.mp4" type="video/mp4">
+      Your browser does not support the video tag.
+    </video>
+  </div>
+
+  <div class="progress-container" id="progress-container">
+    <div class="progress-bar" id="progress-bar">
+      <div class="progress-text" id="progress-text">0%</div>
+    </div>
+  </div>
+
+  <div class="watermark" id="watermark">Made by Ujwal Guru</div>
+
+  <script>
+    const progressBar = document.getElementById('progress-bar');
+    const progressText = document.getElementById('progress-text');
+    const progressContainer = document.getElementById('progress-container');
+    const video1 = document.getElementById('video1');
+    const video2 = document.getElementById('video2');
+    const gifContainer = document.getElementById('gif-container');
+    const watermark = document.getElementById('watermark');
+    let progress = 0;
+
+    // Watermark click increases progress
+    watermark.addEventListener('click', increaseProgress);
+
+    // Keyboard shortcut Ctrl + D increases progress
+    document.addEventListener('keydown', (event) => {
+      if (event.ctrlKey && event.key === 'd') {
+        event.preventDefault(); // Prevent the browser's default behavior (e.g., bookmarking)
+        increaseProgress();
+      }
+    });
+
+    function increaseProgress() {
+      if (progress < 100) {
+        progress += 10;
+        updateProgressBar();
+      }
+    }
+
+    function updateProgressBar() {
+      progressBar.style.width = `${progress}%`; // Correct string interpolation
+      progressText.textContent = `${progress}%`; // Correct string interpolation
+
+      if (progress === 100) {
+        progressBar.style.background = '#28a745';
+        setTimeout(() => {
+          progressContainer.classList.add('fade-out');
+          playSecondVideo();
+        }, 1000);
+      }
+    }
+
+    function playSecondVideo() {
+      gifContainer.style.display = 'none';
+      video2.style.display = 'block';
+      video2.play();
+    }
+
+    video1.addEventListener('ended', () => {
+      video1.style.display = 'none';
+      gifContainer.style.display = 'block';
+    });
+  </script>
+
+</body>
+</html>
