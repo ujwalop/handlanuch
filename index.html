@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Video and Progress Bar</title>
   <style>
+    /* General Styles */
     * {
       margin: 0;
       padding: 0;
@@ -33,7 +34,7 @@
       align-items: center;
     }
 
-    video#video1, video#video2 {
+    video {
       width: 100%;
       height: 100%;
       object-fit: cover;
@@ -118,7 +119,6 @@
       0% { opacity: 1; }
       100% { opacity: 0; display: none; }
     }
-
   </style>
 </head>
 <body>
@@ -131,8 +131,20 @@
     <div class="gif-container" id="gif-container">
       <img id="gif" src="handop1.gif" alt="Background GIF">
     </div>
-    <video id="video2" muted loop style="display: none;">
+    <video id="video2" muted style="display: none;">
       <source src="video2.mp4" type="video/mp4">
+      Your browser does not support the video tag.
+    </video>
+    <video id="video3" muted style="display: none;">
+      <source src="video3.mp4" type="video/mp4">
+      Your browser does not support the video tag.
+    </video>
+    <video id="video4" style="display: none;">
+      <source src="video4.mp4" type="video/mp4">
+      Your browser does not support the video tag.
+    </video>
+    <video id="video5" loop style="display: none;">
+      <source src="video5.mp4" type="video/mp4">
       Your browser does not support the video tag.
     </video>
   </div>
@@ -151,6 +163,9 @@
     const progressContainer = document.getElementById('progress-container');
     const video1 = document.getElementById('video1');
     const video2 = document.getElementById('video2');
+    const video3 = document.getElementById('video3');
+    const video4 = document.getElementById('video4');
+    const video5 = document.getElementById('video5');
     const gifContainer = document.getElementById('gif-container');
     const watermark = document.getElementById('watermark');
     let progress = 0;
@@ -161,7 +176,7 @@
     // Keyboard shortcut Ctrl + D increases progress
     document.addEventListener('keydown', (event) => {
       if (event.ctrlKey && event.key === 'd') {
-        event.preventDefault(); // Prevent the browser's default behavior (e.g., bookmarking)
+        event.preventDefault();
         increaseProgress();
       }
     });
@@ -174,8 +189,8 @@
     }
 
     function updateProgressBar() {
-      progressBar.style.width = `${progress}%`; // Correct string interpolation
-      progressText.textContent = `${progress}%`; // Correct string interpolation
+      progressBar.style.width = ${progress}%;
+      progressText.textContent = ${progress}%;
 
       if (progress === 100) {
         progressBar.style.background = '#28a745';
@@ -195,6 +210,29 @@
     video1.addEventListener('ended', () => {
       video1.style.display = 'none';
       gifContainer.style.display = 'block';
+    });
+
+    video2.addEventListener('ended', () => {
+      video2.style.display = 'none';
+      video3.style.display = 'block';
+      video3.play();
+    });
+
+    video3.addEventListener('ended', () => {
+      video3.style.display = 'none';
+      video4.style.display = 'block';
+      video4.play();
+    });
+
+    // Enable sound for video4
+    video4.addEventListener('play', () => {
+      video4.muted = false; // Unmute video4
+    });
+
+    video4.addEventListener('ended', () => {
+      video4.style.display = 'none';
+      video5.style.display = 'block';
+      video5.play();
     });
   </script>
 
