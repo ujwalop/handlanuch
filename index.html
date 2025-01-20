@@ -189,8 +189,8 @@
     }
 
     function updateProgressBar() {
-      progressBar.style.width = ${progress}%;
-      progressText.textContent = ${progress}%;
+      progressBar.style.width = `${progress}%`;
+      progressText.textContent = `${progress}%`;
 
       if (progress === 100) {
         progressBar.style.background = '#28a745';
